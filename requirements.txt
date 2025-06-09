@@ -1,0 +1,11 @@
+Required packages for the project
+
+pandas
+numpy
+scikit-learn
+matplotlib
+joblib
+yfinance
+streamlit
+xgboost
+df.index[-1] + pd.Timedelta(days=1)
