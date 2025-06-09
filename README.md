@@ -13,7 +13,6 @@ SmartSignal AI is a machine learning-powered stock signal system using a Random 
 - 🎯 **95%+ Accuracy** on recent test sets
 - 💡 **Streamlit Dashboard** for simple, fast access
 - 🧠 **Model Training Pipeline** with hyperparameter tuning and validation
-- 📁 **Organized structure**: /data, /models, /scripts, /results
 
 
 ## 🛠️ Setup Instructions
