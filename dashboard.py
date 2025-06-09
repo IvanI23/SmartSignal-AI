@@ -61,6 +61,7 @@ if st.button("Predict") and ticker:
     with tab2:
         st.subheader("📊 Recent Market Data")
         st.dataframe(df[["Close", "Action"]].tail(10).iloc[::-1])
+        st.subheader("📈 Closing Price Chart")
         st.line_chart(df["Close"])
 
     # Tab 3: Performance
