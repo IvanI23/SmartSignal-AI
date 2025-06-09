@@ -9,11 +9,16 @@ import os
 st.set_page_config(page_title="SmartSignal AI", layout="centered")
 st.title("SmartSignal AI")
 ticker = st.text_input("Enter stock ticker:", "").upper()
-try:
-    stock_info = yf.Ticker(ticker).info
-    valid = stock_info.get("regularMarketPrice") is not None
-except Exception:
-    valid = False
+
+# Validate ticker symbol
+def is_valid_ticker(ticker):
+    try:
+        data = yf.Ticker(ticker).history(period="1d")
+        return not data.empty
+    except Exception:
+        return False
+
+valid = is_valid_ticker(ticker)
 
 
 # Run prediction
