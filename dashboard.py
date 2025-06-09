@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import yfinance as yf
 import joblib
 import control
 import os
@@ -8,9 +9,19 @@ import os
 st.set_page_config(page_title="SmartSignal AI", layout="centered")
 st.title("SmartSignal AI")
 ticker = st.text_input("Enter stock ticker:", "").upper()
+try:
+    stock_info = yf.Ticker(ticker).info
+    valid = stock_info.get("regularMarketPrice") is not None
+except Exception:
+    valid = False
+
 
 # Run prediction
 if st.button("Predict") and ticker:
+    if not valid:
+        st.error("Invalid ticker symbol. Please enter a valid stock ticker.")
+        st.stop()
+    
     with st.spinner("Running prediction pipeline..."):
         control.control(ticker)
 
