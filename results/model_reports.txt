@@ -1,7 +1,7 @@
 Model: Random Forest
- Time Series CV Accuracy: 0.7201
+ Time Series CV Accuracy: 0.7228
 
 Model: XGBoost
- Time Series CV Accuracy: 0.6815
+ Time Series CV Accuracy: 0.6845
 
 Model Used: Random Forest
