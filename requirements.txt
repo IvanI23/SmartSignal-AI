@@ -8,4 +8,3 @@ joblib
 yfinance
 streamlit
 xgboost
-df.index[-1] + pd.Timedelta(days=1)
