@@ -1,6 +1,6 @@
 FINAL STRATEGY SUMMARY 
-Strategy Final Value: $199344.95
-Buy & Hold Final Value: $78310.49
-Strategy Return: 1893.45%
-Buy & Hold Return: 683.10%
-Model Accuracy (on recent test set): 95.00%
+Strategy Final Value: $364771.85
+Buy & Hold Final Value: $135952.47
+Strategy Return: 3547.72%
+Buy & Hold Return: 1259.52%
+Model Accuracy (on recent test set): 100.00%
