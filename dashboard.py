@@ -4,6 +4,7 @@ import yfinance as yf
 import joblib
 import control
 import os
+import time
 
 # Streamlit dashboard config
 st.set_page_config(page_title="SmartSignal AI", layout="centered")
@@ -28,7 +29,10 @@ if st.button("Predict") and ticker:
         st.stop()
     
     with st.spinner("Running prediction pipeline..."):
-        control.control(ticker)
+            start_time = time.time()
+            control.control(ticker)
+            elapsed_time = time.time() - start_time
+    st.success(f"✅ Prediction completed in {elapsed_time:.2f} seconds.")
 
     # Load prediction results
     try:
