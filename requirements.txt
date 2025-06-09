@@ -1,10 +1,10 @@
-Required packages for the project
+#Required packages for the project
 
-pandas
-numpy
-scikit-learn
-matplotlib
-joblib
-yfinance
-streamlit
-xgboost
+#pandas
+#numpy
+#scikit-learn
+#matplotlib
+#joblib
+#yfinance
+#streamlit
+#xgboost
