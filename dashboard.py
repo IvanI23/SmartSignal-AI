@@ -2,9 +2,14 @@ import streamlit as st
 import pandas as pd
 import yfinance as yf
 import joblib
-import control
 import os
 import time
+from scripts.logger import WorkflowLogger
+from scripts.downloader import download_stock_data
+from scripts.indicators import add_indicators
+from models.training import train_models
+from scripts.backtest import run_backtest, plot_backtest
+from scripts.reporting import plot_feature_importance, write_summary
 
 # Streamlit dashboard config
 st.set_page_config(page_title="SmartSignal AI", layout="centered")
@@ -21,17 +26,70 @@ def is_valid_ticker(ticker):
 
 valid = is_valid_ticker(ticker)
 
-
 # Run prediction
 if st.button("Predict") and ticker:
     if not valid:
         st.error("Invalid ticker symbol. Please enter a valid stock ticker.")
         st.stop()
-    
-    with st.spinner("Running prediction pipeline..."):
-            start_time = time.time()
-            control.control(ticker)
-            elapsed_time = time.time() - start_time
+
+    logger = WorkflowLogger()
+    log_placeholder = st.empty()
+    start_time = time.time()
+
+    # Step 1: Download data
+    logger.log(f"[{time.strftime('%H:%M:%S')}] Downloading data for {ticker}...")
+    log_placeholder.code(logger.get_log(), language="bash")
+    today = pd.Timestamp.now().strftime("%Y-%m-%d")
+    raw_path = f"data/raw/{ticker}.csv"
+    processed_path = f"data/processed/{ticker}_indicators.csv"
+    model_path = f"models/{ticker}_model.pkl"
+    save_path = download_stock_data(ticker, "2015-01-01", today)
+
+    # Step 2: Calculate indicators
+    logger.log(f"[{time.strftime('%H:%M:%S')}] Calculating indicators for {ticker}...")
+    log_placeholder.code(logger.get_log(), language="bash")
+    add_indicators(save_path, ticker)
+
+    # Step 3: Train model
+    logger.log(f"[{time.strftime('%H:%M:%S')}] Training model for {ticker}...")
+    log_placeholder.code(logger.get_log(), language="bash")
+    model = train_models(
+        data_path=processed_path,
+        report_path="results/model_reports.txt",
+        model_path=model_path
+    )
+
+    # Step 4: Make predictions
+    logger.log(f"[{time.strftime('%H:%M:%S')}] Making predictions...")
+    log_placeholder.code(logger.get_log(), language="bash")
+    df = pd.read_csv(processed_path, index_col="Date", parse_dates=True, low_memory=False)
+    X = df.drop(columns=["Target"])
+    df["Prediction"] = model.predict(X)
+
+    # Step 5: Backtest
+    logger.log(f"[{time.strftime('%H:%M:%S')}] Running backtest...")
+    log_placeholder.code(logger.get_log(), language="bash")
+    backtest_results = run_backtest(df, df["Prediction"])
+    backtest_results.to_csv("results/backtest_results.csv")
+    plot_backtest(backtest_results)
+
+    # Step 6: Reporting
+    logger.log(f"[{time.strftime('%H:%M:%S')}] Generating reports...")
+    log_placeholder.code(logger.get_log(), language="bash")
+    final_value = backtest_results['Model_Strategy'].iloc[-1]
+    buy_hold_value = backtest_results['Buy_Hold'].iloc[-1]
+    df["Signal"] = df["Prediction"]
+    df["Correct"] = (df["Signal"] == df["Target"]).astype(int)
+    rolling_accuracy = df["Correct"].rolling(20).mean().iloc[-1]
+    plot_feature_importance(model, X)
+    write_summary(final_value, buy_hold_value, accuracy=rolling_accuracy)
+    df.to_csv("results/final_predictions.csv")
+
+    logger.log(f"[{time.strftime('%H:%M:%S')}] Workflow complete!")
+    log_placeholder.code(logger.get_log(), language="bash")
+    elapsed_time = time.time() - start_time
+    time.sleep(0.5)
+    log_placeholder.empty()
     st.success(f"✅ Prediction completed in {elapsed_time:.2f} seconds.")
 
     # Load prediction results
@@ -43,7 +101,7 @@ if st.button("Predict") and ticker:
 
     # Load trained model
     try:
-        model = joblib.load("models/trained_model.pkl")
+        model = joblib.load(f"models/{ticker}_model.pkl")
     except Exception as e:
         st.error(f"Error loading model: {e}")
         st.stop()

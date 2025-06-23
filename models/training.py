@@ -28,12 +28,12 @@ def train_models(data_path, report_path, model_path):
     X = df.drop(columns=['Target'])
     y = df['Target'].astype(int)
 
-    # Define Random Forest model
+    # Define Random Forest model (compromise)
     model = RandomForestClassifier(
-        n_estimators=300, max_depth=10, min_samples_split=5, random_state=42
+        n_estimators=160, max_depth=20, min_samples_split=5, random_state=42, n_jobs=-1
     )
 
-    tscv = TimeSeriesSplit(n_splits=5)
+    tscv = TimeSeriesSplit(n_splits=3)
     scores = []
 
     with open(report_path, "w", encoding='utf-8') as f:

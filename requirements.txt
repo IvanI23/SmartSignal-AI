@@ -7,4 +7,3 @@ matplotlib
 joblib
 yfinance
 streamlit
-xgboost
