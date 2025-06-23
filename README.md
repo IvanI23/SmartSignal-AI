@@ -2,6 +2,7 @@
 
 ![AI Stock Prediction](https://img.shields.io/badge/Powered%20By-Machine%20Learning-blueviolet)
 ![Speed](https://img.shields.io/badge/Workflow-Under%2015s-brightgreen)
+![Accuracy](https://img.shields.io/badge/Accuracy-90%25%2B-brightgreen)
 
 SmartSignal AI is a fast, modern stock signal system powered by machine learning. It uses a Random Forest model trained on 10+ technical indicators to generate daily buy/sell signals for any stock ticker. The workflow is fully automated, backtested, and visualized in a beautiful Streamlit dashboard.
 
@@ -10,6 +11,7 @@ SmartSignal AI is a fast, modern stock signal system powered by machine learning
 ## 🚀 Key Features
 
 - **Lightning-Fast Workflow**: Full pipeline (download, indicators, training, prediction, backtest, reporting) runs in ~15 seconds per ticker.
+- **90%+ Accuracy**: Achieves over 90% accuracy on recent test sets.
 - **Per-Ticker Model**: Each stock gets its own custom-trained Random Forest model for maximum accuracy.
 - **Smart Data Window**: Uses the last 5 years of data for a balance of speed and predictive power.
 - **Modern ML**: Random Forest (160 trees, max depth 20, 3-fold CV, all CPU cores).
@@ -17,6 +19,7 @@ SmartSignal AI is a fast, modern stock signal system powered by machine learning
 - **Real-Time Terminal Log**: See every step of the workflow live in the dashboard, just like a terminal.
 - **Intuitive UI**: Streamlit dashboard with tabs for predictions, market data, performance, features, and reports.
 - **Automatic Reporting**: Backtest results, feature importance, and summary reports saved for every run.
+- **Example Data**: Example results and reports are available in the `results/` directory for quick exploration.
 
 ---
 
@@ -37,6 +40,8 @@ SmartSignal AI is a fast, modern stock signal system powered by machine learning
    ```
 
 > **Note:** Model training and prediction for each ticker typically takes 10-20 seconds, depending on your hardware and internet speed.
+> 
+> **Example data and reports are available in the `results/` directory.**
 
 ---
 
